@@ -90,3 +90,28 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 canmatrix = ["j1939.dbc", "py.typed"]
+
+# Lets pixi consume this repo as a source dependency
+# (`canmatrix = { git = "..." }`); without these tables pixi rejects the
+# checkout as "does not contain a supported manifest".
+[tool.pixi.workspace]
+channels = ["https://prefix.dev/conda-forge"]
+platforms = ["linux-64", "linux-aarch64"]
+preview = ["pixi-build"]
+
+[tool.pixi.package]
+name = "canmatrix"
+version = "1.2" # keep in sync with canmatrix.__version__
+
+[tool.pixi.package.build.backend]
+name = "pixi-build-python"
+version = ">=0.8,<0.9"
+
+[tool.pixi.package.host-dependencies]
+python     = ">=3.8"
+setuptools = ">=40.8.0"
+
+[tool.pixi.package.run-dependencies]
+python = ">=3.8"
+attrs  = ">=19.2.0"
+click  = "*"
